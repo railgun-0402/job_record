@@ -1,15 +1,55 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>サインアップ</title>
-    </head>
-    <body>
-        <h2>サインアップ</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Sign Up</button>
-        </form>
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<h2>サインアップ</h2>
+<form class="mx-auto" method="post">
+   {% csrf_token %}
+
+    <!--エラーがある場合の表記-->
+   {% if form.errors %}
+   <div class="alert alert-danger" role="alert">
+     {% for field in form %}
+       {% for error in field.errors %}
+         {% if error %}
+           <p>{{ error }}</p>
+         {% endif %}
+       {% endfor %}
+     {% endfor %}
+   </div>
+   {% endif %}
+
+    <!--ユーザ名-->
+   <p><label for="id_username">ユーザー名</label>
+   <input type="text" name="username" class="form-control" maxlength="150" autocapitalize="none" autocomplete="username" autofocus required id="id_username">
+
+    <!--Eメール-->
+   <p><label for="email">Eメール</label>
+    <input type="email" name="email" class="form-control" required id="email">
+
+    <!--パスワード-->
+   <p><label for="id_password1">パスワード</label>
+    <input type="password" name="password1" class="form-control" autocomplete="new-password" required id="id_password1">
+
+     <span class="helptext">
+    <ul>
+       <li>あなたの他の個人情報と似ているパスワードにはできません。</li>
+       <li>パスワードは最低 8 文字以上必要です。</li>
+       <li>よく使われるパスワードにはできません。</li>
+       <li>数字だけのパスワードにはできません。</li>
+     </ul>
+    </span>
+   </p>
+
+    <!--パスワード確認-->
+   <p><label for="id_password2">パスワード(確認用)</label>
+       <input type="password" name="password2" class="form-control" autocomplete="new-password" required id="id_password2"></p>
+
+    <button class="btn btn-lg btn-secondary my-1" type="submit">アカウント作成</button>
+ </form>
+
+<!--新規登録-->
+ <p>アカウントをお持ちですか？<a href="{% url 'login' %}">ログイン</a></p>
+
+ {% endblock %}
